@@ -35,7 +35,8 @@
 *.files
 *.includes
 
-*.creator
-*.creator.user
+
+*.user
+build-*
 
 imageGray

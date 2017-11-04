@@ -6,9 +6,9 @@ using namespace cv;
 using namespace std;
 int main (int argc, char **argv)
 {
-    Mat image, image_gray;
+    Mat image, image_gray, aa;
     image = imread(argv[1], CV_LOAD_IMAGE_COLOR );
-    if (argc != 2 || !image.data) 
+    if (argc != 2 || !image.data)
     {
         cout << "No image data\n";
         return -1;
