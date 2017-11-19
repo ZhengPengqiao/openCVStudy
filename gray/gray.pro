@@ -24,5 +24,3 @@ LIBS += -lopencv_gpu
 LIBS += -lopencv_ocl
 
 
-DISTFILES += \
-    saber.jpg
