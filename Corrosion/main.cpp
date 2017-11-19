@@ -21,6 +21,7 @@ int main (int argc, char **argv)
     //显示原始图
     imshow("[原图] 腐蚀操作", srcImage);
 
+    //获取常用的结构元素的形状：矩形（包括线形）;
     Mat element = getStructuringElement(MORPH_RECT, Size(15,15));
     Mat dstImage;
     erode(srcImage, dstImage, element);
