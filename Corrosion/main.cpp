@@ -1,3 +1,9 @@
+/*
+ * 文件名称：main.c
+ * 创建时间：2017-11-19
+ * 文件介绍：用来示例opencv的腐蚀效果的使用
+ */
+
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>

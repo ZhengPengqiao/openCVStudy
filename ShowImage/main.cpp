@@ -1,3 +1,9 @@
+/*
+ * 文件名称：main.c
+ * 创建时间：2017-11-19
+ * 文件介绍：用来示例opencv的读取显示图像的使用
+ */
+
 #include <opencv2/opencv.hpp>
 #include <iostream>
 
