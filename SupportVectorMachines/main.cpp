@@ -45,9 +45,8 @@ int main()
     float labels[4] = {1.0, -1.0, -1.0, -1.0};
     Mat labelsMat(3, 1, CV_32FC1, labels);
 
-    float trainingData[8][2] = { {501, 10}, {255, 10}, {501, 255}, {10, 501} ,\
-                                 {501, 10}, {501, 10}, {501, 10}, {501, 10}};
-    Mat trainingDataMat(8, 2, CV_32FC1, trainingData);
+    float trainingData[8][2] = { {501, 10}, {255, 10}, {501, 255}, {10, 501}};
+    Mat trainingDataMat(3, 2, CV_32FC1, trainingData);
 
     ShowHelpText();
 

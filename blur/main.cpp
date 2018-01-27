@@ -16,9 +16,16 @@ using namespace std;
 
 int main (int argc, char **argv)
 {
+    if (argc != 2)
+    {
+        cout << "No file param\n";
+        return -1;
+    }
+
     //读取一张图片
     Mat srcImage = imread(argv[1], CV_LOAD_IMAGE_COLOR );
-    if (argc != 2 || !srcImage.data)
+
+   if( !srcImage.data )
     {
         cout << "No image data\n";
         return -1;
