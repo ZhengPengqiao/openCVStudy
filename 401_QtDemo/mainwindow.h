@@ -11,6 +11,8 @@
 #include "miboxfilter.h"
 #include "miblur.h"
 #include "migaussianblur.h"
+#include "mimedianblur.h"
+#include "mibilateralfilter.h"
 
 class MainWindow : public QMainWindow
 {

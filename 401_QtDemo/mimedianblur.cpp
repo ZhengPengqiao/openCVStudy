@@ -1,4 +1,4 @@
-#include "migaussianblur.h"
+#include "mimedianblur.h"
 
 #include <QLabel>
 #include <QLineEdit>
@@ -7,9 +7,9 @@
 #include <QApplication>
 #include <QSizePolicy>
 
-#define MINAME "高斯滤波GaussianBlur"
+#define MINAME "中值滤波MedianBlur"
 
-MIGaussianBlur::MIGaussianBlur()
+MIMedianBlur::MIMedianBlur()
 {
     this->setModelItemName(MINAME);
 
@@ -22,11 +22,11 @@ MIGaussianBlur::MIGaussianBlur()
     label->setText("待处理图片:");
     hBoxLayout->addWidget(label);
     imagePath = new QLineEdit(subPage);
-    imagePath->setText("../assert/image3.jpg");
+    imagePath->setText("../assert/image4.jpg");
     hBoxLayout->addWidget(imagePath);
     button = new QPushButton(subPage);
     button->setText("...");
-    connect(button, &QPushButton::clicked, this, &MIGaussianBlur::selectFile);
+    connect(button, &QPushButton::clicked, this, &MIMedianBlur::selectFile);
     hBoxLayout->addWidget(button);
 
     vBoxLayout->addLayout(hBoxLayout);
@@ -34,7 +34,6 @@ MIGaussianBlur::MIGaussianBlur()
     imShowChechBox = new QCheckBox(subPage);
     imShowChechBox->setText("使用OpenCV的imshow");
     vBoxLayout->addWidget(imShowChechBox);
-
 
     hBoxLayoutSlider = new QHBoxLayout();
     labelSlider = new QLabel(subPage);
@@ -47,11 +46,10 @@ MIGaussianBlur::MIGaussianBlur()
     horizontalSlider->setSingleStep(1);
     horizontalSlider->setTickPosition(QSlider::TicksAbove);
     horizontalSlider->setValue(6);
-    connect(horizontalSlider, &QSlider::valueChanged, this, &MIGaussianBlur::onSubmitClicked);
+    connect(horizontalSlider, &QSlider::valueChanged, this, &MIMedianBlur::onSubmitClicked);
     hBoxLayoutSlider->addWidget(horizontalSlider);
 
     vBoxLayout->addLayout(hBoxLayoutSlider);
-
 
     scrollArea = new QScrollArea(subPage);
     scrollArea->setObjectName(QStringLiteral("scrollArea"));
@@ -98,7 +96,7 @@ MIGaussianBlur::MIGaussianBlur()
     onSubmitClicked();
 }
 
-void MIGaussianBlur::selectFile()
+void MIMedianBlur::selectFile()
 {
     qDebug() << "selectFile: " << this->modelItemName;
     //定义文件对话框类
@@ -138,7 +136,7 @@ void MIGaussianBlur::selectFile()
 }
 
 
-void MIGaussianBlur::onSubmitClicked()
+void MIMedianBlur::onSubmitClicked()
 {
     QImage qimage;
     qDebug() << "onSubmitClicked: " << this->modelItemName;
@@ -160,7 +158,8 @@ void MIGaussianBlur::onSubmitClicked()
 
     //进行方框滤波操作
     Mat out;
-    GaussianBlur( image, out, Size( horizontalSlider->value()*2+1, horizontalSlider->value()*2+1 ), 0, 0 );
+    medianBlur ( image, out, horizontalSlider->value()*2+1);
+
     //创建窗口
     if( imShowChechBox->isChecked() == true )
     {
@@ -171,7 +170,7 @@ void MIGaussianBlur::onSubmitClicked()
     //显示原图
     if( imShowChechBox->isChecked() == true )
     {
-        imshow((QString(MINAME)+QString("【原图】")).toStdString(), image );
+        imshow( (QString(MINAME)+QString("【原图】")).toStdString(), image );
     }
     //显示效果图
     if( imShowChechBox->isChecked() == true )

@@ -17,7 +17,9 @@ SOURCES += main.cpp\
     mibase.cpp \
     miboxfilter.cpp \
     miblur.cpp \
-    migaussianblur.cpp
+    migaussianblur.cpp \
+    mimedianblur.cpp \
+    mibilateralfilter.cpp
 
 
 
@@ -48,6 +50,8 @@ HEADERS  += mainwindow.h \
     mibase.h \
     miboxfilter.h \
     miblur.h \
-    migaussianblur.h
+    migaussianblur.h \
+    mimedianblur.h \
+    mibilateralfilter.h
 
 FORMS    +=

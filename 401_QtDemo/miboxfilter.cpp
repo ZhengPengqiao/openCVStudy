@@ -22,7 +22,7 @@ MIBoxFilter::MIBoxFilter()
     label->setText("待处理图片:");
     hBoxLayout->addWidget(label);
     imagePath = new QLineEdit(subPage);
-    imagePath->setText("../assert/image1.jpg");
+    imagePath->setText("../assert/image1.png");
     hBoxLayout->addWidget(imagePath);
     button = new QPushButton(subPage);
     button->setText("...");
@@ -34,6 +34,24 @@ MIBoxFilter::MIBoxFilter()
     imShowChechBox = new QCheckBox(subPage);
     imShowChechBox->setText("使用OpenCV的imshow");
     vBoxLayout->addWidget(imShowChechBox);
+
+
+    hBoxLayoutSlider = new QHBoxLayout();
+    labelSlider = new QLabel(subPage);
+    labelSlider->setText("内核值:6");
+    hBoxLayoutSlider->addWidget(labelSlider);
+    horizontalSlider = new QSlider(subPage);
+    horizontalSlider->setOrientation(Qt::Horizontal);
+    horizontalSlider->setMinimum(0);
+    horizontalSlider->setMaximum(40);
+    horizontalSlider->setSingleStep(1);
+    horizontalSlider->setTickPosition(QSlider::TicksAbove);
+    horizontalSlider->setValue(6);
+    connect(horizontalSlider, &QSlider::valueChanged, this, &MIBoxFilter::onSubmitClicked);
+    hBoxLayoutSlider->addWidget(horizontalSlider);
+
+    vBoxLayout->addLayout(hBoxLayoutSlider);
+
 
     scrollArea = new QScrollArea(subPage);
     scrollArea->setObjectName(QStringLiteral("scrollArea"));
@@ -77,6 +95,8 @@ MIBoxFilter::MIBoxFilter()
     vBoxLayout->addWidget(scrollArea);
 
     this->addSubPage(subPage);
+
+    onSubmitClicked();
 }
 
 void MIBoxFilter::selectFile()
@@ -110,6 +130,8 @@ void MIBoxFilter::selectFile()
         label_src->setText(MINAME+QString("【原图】\n width:%1 \n height:%2")
                            .arg(image.width()).arg(image.height()));
         scrollAreaWidgetContents->resize(gridLayout->sizeHint());
+
+        onSubmitClicked();
     }
     else
     {
@@ -122,6 +144,9 @@ void MIBoxFilter::onSubmitClicked()
 {
     QImage qimage;
     qDebug() << "onSubmitClicked: " << this->modelItemName;
+    qDebug() << "内核值: "+ QString("%1").arg(horizontalSlider->value());
+
+    labelSlider->setText("内核值: "+ QString("%1").arg(horizontalSlider->value()) );
     // 载入原图
 
     Mat image=imread(imagePath->text().toStdString());
@@ -137,7 +162,7 @@ void MIBoxFilter::onSubmitClicked()
 
     //进行方框滤波操作
     Mat out;
-    boxFilter( image, out, -1,Size(5, 5));
+    boxFilter( image, out, -1,Size(horizontalSlider->value()+1, horizontalSlider->value()+1));
 
 
     //创建窗口

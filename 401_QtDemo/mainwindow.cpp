@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
     addModelItem(new MIBoxFilter());
     addModelItem(new MIBlur());
     addModelItem(new MIGaussianBlur());
+    addModelItem(new MIMedianBlur());
+    addModelItem(new MIBilateralFilter());
 }
 
 

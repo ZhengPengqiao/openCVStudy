@@ -35,6 +35,22 @@ MIBlur::MIBlur()
     imShowChechBox->setText("使用OpenCV的imshow");
     vBoxLayout->addWidget(imShowChechBox);
 
+    hBoxLayoutSlider = new QHBoxLayout();
+    labelSlider = new QLabel(subPage);
+    labelSlider->setText("内核值:6");
+    hBoxLayoutSlider->addWidget(labelSlider);
+    horizontalSlider = new QSlider(subPage);
+    horizontalSlider->setOrientation(Qt::Horizontal);
+    horizontalSlider->setMinimum(0);
+    horizontalSlider->setMaximum(40);
+    horizontalSlider->setSingleStep(1);
+    horizontalSlider->setTickPosition(QSlider::TicksAbove);
+    horizontalSlider->setValue(6);
+    connect(horizontalSlider, &QSlider::valueChanged, this, &MIBlur::onSubmitClicked);
+    hBoxLayoutSlider->addWidget(horizontalSlider);
+
+    vBoxLayout->addLayout(hBoxLayoutSlider);
+
     scrollArea = new QScrollArea(subPage);
     scrollArea->setObjectName(QStringLiteral("scrollArea"));
     scrollArea->setWidgetResizable(false);
@@ -77,6 +93,7 @@ MIBlur::MIBlur()
     vBoxLayout->addWidget(scrollArea);
 
     this->addSubPage(subPage);
+    onSubmitClicked();
 }
 
 void MIBlur::selectFile()
@@ -110,6 +127,7 @@ void MIBlur::selectFile()
         label_src->setText(MINAME+QString("【原图】\n width:%1 \n height:%2")
                            .arg(image.width()).arg(image.height()));
         scrollAreaWidgetContents->resize(gridLayout->sizeHint());
+        onSubmitClicked();
     }
     else
     {
@@ -122,6 +140,9 @@ void MIBlur::onSubmitClicked()
 {
     QImage qimage;
     qDebug() << "onSubmitClicked: " << this->modelItemName;
+    qDebug() << "内核值: "+ QString("%1").arg(horizontalSlider->value());
+
+    labelSlider->setText("内核值: "+ QString("%1").arg(horizontalSlider->value()) );
     // 载入原图
 
     Mat image=imread(imagePath->text().toStdString());
@@ -137,7 +158,7 @@ void MIBlur::onSubmitClicked()
 
     //进行方框滤波操作
     Mat out;
-    blur( image, out, Size(7, 7));
+    blur( image, out, Size(horizontalSlider->value()+1, horizontalSlider->value()+1));
 
     //创建窗口
     if( imShowChechBox->isChecked() == true )

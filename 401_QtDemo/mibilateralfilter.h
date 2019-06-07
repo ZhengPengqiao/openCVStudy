@@ -1,5 +1,5 @@
-#ifndef MIBOXFILTER_H
-#define MIBOXFILTER_H
+#ifndef MIBILATERALFILTER_H
+#define MIBILATERALFILTER_H
 
 #include "mibase.h"
 
@@ -15,10 +15,10 @@
 #include <QCheckBox>
 #include <QSlider>
 
-class MIBoxFilter : public MIBase
+class MIBilateralFilter : public MIBase
 {
 public:
-    MIBoxFilter();
+    MIBilateralFilter();
     QVBoxLayout *vBoxLayout;
     QHBoxLayout *hBoxLayout;
     QWidget *subPage;
@@ -45,5 +45,4 @@ public slots:
     void onSubmitClicked();
     void selectFile();
 };
-
-#endif // MIBOXFILTER_H
+#endif // MIBILATERALFILTER_H

@@ -12,6 +12,7 @@
 #include <QGridLayout>
 #include <QMessageBox>
 #include <QCheckBox>
+#include <QSlider>
 
 class MIGaussianBlur : public MIBase
 {
@@ -35,6 +36,9 @@ public:
     QImage image;
     QLabel *label_src;
     QLabel *label_dst;
+    QHBoxLayout *hBoxLayoutSlider;
+    QSlider *horizontalSlider;
+    QLabel *labelSlider;
 
 public slots:
     void onSubmitClicked();
