@@ -37,7 +37,7 @@ int main()
         StrStm<<i+1;
         StrStm>>imageFileName;
         imageFileName += ".jpg";
-        cv::Mat image = imread("img"+imageFileName); 
+        cv::Mat image = imread("../assert/cali/img"+imageFileName);
         /* 提取角点 */   
         Mat imageGray;
         cvtColor(image, imageGray , CV_RGB2GRAY);
@@ -209,7 +209,7 @@ int main()
     {
         cout<<"TestImage ..."<<endl;
         Mat newCameraMatrix = Mat(3,3,CV_32FC1,Scalar::all(0));
-        Mat testImage = imread("a.jpg",1);
+        Mat testImage = imread("../assert/cali/a.jpg",1);
         fisheye::initUndistortRectifyMap(intrinsic_matrix,distortion_coeffs,R,intrinsic_matrix,image_size,CV_32FC1,mapx,mapy);
         Mat t = testImage.clone();
         cv::remap(testImage,t,mapx, mapy, INTER_LINEAR);

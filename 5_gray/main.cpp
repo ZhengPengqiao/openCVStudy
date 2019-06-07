@@ -10,13 +10,23 @@
 #include <iostream>
 using namespace cv;
 using namespace std;
+
+char *imageName = "../assert/image1.png";
+
 int main (int argc, char **argv)
 {
+    if (argc == 2)
+    {
+        imageName = argv[1];
+    }
+
+    cout << "image path:" << imageName << endl;
+
     Mat image, image_gray, aa;
 
     //读取一张图片
-    image = imread(argv[1], CV_LOAD_IMAGE_COLOR );
-    if (argc != 2 || !image.data)
+    image = imread(imageName, CV_LOAD_IMAGE_COLOR );
+    if (!image.data)
     {
         cout << "No image data\n";
         return -1;

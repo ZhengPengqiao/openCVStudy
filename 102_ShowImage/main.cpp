@@ -6,14 +6,14 @@ using namespace cv;
 int main()
 {
     //-------------------------[图片的载入]---------------------------------------
-    Mat saber = imread("../assert/saber.jpg"); //载入到Mat
+    Mat saber = imread("../assert/image5.jpg"); //载入到Mat
     namedWindow("[1]动漫图");  //创建一个名为"[1]动漫图"的窗口
     imshow("[1]动漫图",saber);  //显示名为"[1]动漫图"的窗口
 
     //-------------------------[初级图像混合]---------------------------------------
-    Mat image = imread("../assert/dota2.jpg");
-    Mat logo1 = imread("../assert/dota2-logo1.jpg");
-    Mat logo2 = imread("../assert/dota2-logo2.jpg");
+    Mat image = imread("../assert/image2.jpg");
+    Mat logo1 = imread("../assert/image11.jpg");
+    Mat logo2 = imread("../assert/image12.jpg");
 
     //先显示载入的图片
     namedWindow("[2]原图片");
@@ -46,8 +46,8 @@ int main()
     imshow("[4]原图+logo图", image);
 
     //-------------------------[图像输出]---------------------------------------
-    //输出一张jpg图像到../assert/tmp/下
-    imwrite("../assert/tmp/原图+logo图.jpg",image);
+    //输出一张jpg图像到当前执行程序同目录下
+    imwrite("./原图+logo图.jpg",image);
 
     waitKey();
 }
