@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     miopenclose.cpp \
     mitopblackhat.cpp \
     mithreshold.cpp \
-    mifloodfill.cpp
+    mifloodfill.cpp \
+    mipyrresize.cpp
 
 
 
@@ -66,6 +67,7 @@ HEADERS  += mainwindow.h \
     miopenclose.h \
     mitopblackhat.h \
     mithreshold.h \
-    mifloodfill.h
+    mifloodfill.h \
+    mipyrresize.h
 
 FORMS    +=
