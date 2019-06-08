@@ -24,7 +24,9 @@ SOURCES += main.cpp\
     mierode.cpp \
     mierodedilate.cpp \
     miopenclose.cpp \
-    mitopblackhat.cpp
+    mitopblackhat.cpp \
+    mithreshold.cpp \
+    mifloodfill.cpp
 
 
 
@@ -62,6 +64,8 @@ HEADERS  += mainwindow.h \
     mierode.h \
     mierodedilate.h \
     miopenclose.h \
-    mitopblackhat.h
+    mitopblackhat.h \
+    mithreshold.h \
+    mifloodfill.h
 
 FORMS    +=

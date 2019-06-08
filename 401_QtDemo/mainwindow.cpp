@@ -13,6 +13,8 @@
 #include "mierodedilate.h"
 #include "miopenclose.h"
 #include "mitopblackhat.h"
+#include "mithreshold.h"
+#include "mifloodfill.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -29,6 +31,8 @@ MainWindow::MainWindow(QWidget *parent) :
     addModelItem(new MIErodeDilate());
     addModelItem(new MIOpenClose());
     addModelItem(new MITopBlackHat());
+    addModelItem(new MIThreshold());
+    addModelItem(new MIFloodFill());
 }
 
 
