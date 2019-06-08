@@ -1,4 +1,5 @@
-#include "miblur.h"
+#include "mitopblackhat.h"
+
 
 #include <QLabel>
 #include <QLineEdit>
@@ -7,12 +8,13 @@
 #include <QApplication>
 #include <QSizePolicy>
 
-#define MINAME "均值滤波Blur"
+#define MINAME "顶帽/黑帽TopBlackHat"
 
-MIBlur::MIBlur()
+MITopBlackHat::MITopBlackHat()
 {
     this->setModelItemName(MINAME);
 
+    sliderMaxIterationNum = 40;
     subPage = new QWidget();
 
 
@@ -22,11 +24,11 @@ MIBlur::MIBlur()
     label->setText("待处理图片:");
     hBoxLayout->addWidget(label);
     imagePath = new QLineEdit(subPage);
-    imagePath->setText("../assert/image4.jpg");
+    imagePath->setText("../assert/image19.jpg");
     hBoxLayout->addWidget(imagePath);
     button = new QPushButton(subPage);
     button->setText("...");
-    connect(button, &QPushButton::clicked, this, &MIBlur::selectFile);
+    connect(button, &QPushButton::clicked, this, &MITopBlackHat::selectFile);
     hBoxLayout->addWidget(button);
 
     vBoxLayout->addLayout(hBoxLayout);
@@ -37,16 +39,16 @@ MIBlur::MIBlur()
 
     hBoxLayoutSlider = new QHBoxLayout();
     labelSlider = new QLabel(subPage);
-    labelSlider->setText("内核值:6");
+    labelSlider->setText("内核值:" + QString("%1").arg(sliderMaxIterationNum));
     hBoxLayoutSlider->addWidget(labelSlider);
     horizontalSlider = new QSlider(subPage);
     horizontalSlider->setOrientation(Qt::Horizontal);
     horizontalSlider->setMinimum(0);
-    horizontalSlider->setMaximum(40);
+    horizontalSlider->setMaximum(sliderMaxIterationNum*2);
     horizontalSlider->setSingleStep(1);
     horizontalSlider->setTickPosition(QSlider::TicksAbove);
-    horizontalSlider->setValue(6);
-    connect(horizontalSlider, &QSlider::valueChanged, this, &MIBlur::onSubmitClicked);
+    horizontalSlider->setValue(sliderMaxIterationNum);
+    connect(horizontalSlider, &QSlider::valueChanged, this, &MITopBlackHat::onSubmitClicked);
     hBoxLayoutSlider->addWidget(horizontalSlider);
 
     vBoxLayout->addLayout(hBoxLayoutSlider);
@@ -96,7 +98,7 @@ MIBlur::MIBlur()
     onSubmitClicked();
 }
 
-void MIBlur::selectFile()
+void MITopBlackHat::selectFile()
 {
     qDebug() << "selectFile: " << this->modelItemName;
     //定义文件对话框类
@@ -136,13 +138,10 @@ void MIBlur::selectFile()
 }
 
 
-void MIBlur::onSubmitClicked()
+void MITopBlackHat::onSubmitClicked()
 {
     QImage qimage;
     qDebug() << "onSubmitClicked: " << this->modelItemName;
-    qDebug() << "内核值: "+ QString("%1").arg(horizontalSlider->value());
-
-    labelSlider->setText("内核值: "+ QString("%1").arg(horizontalSlider->value()) );
     // 载入原图
 
     Mat image=imread(imagePath->text().toStdString());
@@ -156,9 +155,23 @@ void MIBlur::onSubmitClicked()
     qDebug() << "image: rows=" << image.rows;
     qDebug() << "image: cols=" << image.cols;
 
-    //进行均值滤波操作
+    //获取自定义核
+    int offset = horizontalSlider->value() - sliderMaxIterationNum;	//偏移量
+    int Absolute_offset = offset > 0 ? offset : -offset;//偏移量绝对值
+
+    qDebug() << "内核值: "+ QString("%1").arg(Absolute_offset);
+    labelSlider->setText("内核值: "+ QString("%1").arg(Absolute_offset) );
+
+    //自定义核
+    Mat element = getStructuringElement(MORPH_RECT,
+                  Size(Absolute_offset*2+1, Absolute_offset*2+1),
+                  Point(Absolute_offset, Absolute_offset) );
+    //进行操作
     Mat out;
-    blur( image, out, Size(horizontalSlider->value()+1, horizontalSlider->value()+1));
+    if( offset < 0 )
+        morphologyEx(image, out, MORPH_TOPHAT, element);
+    else
+        morphologyEx(image, out, MORPH_BLACKHAT, element);
 
     //创建窗口
     if( imShowChechBox->isChecked() == true )

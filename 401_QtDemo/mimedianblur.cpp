@@ -156,7 +156,7 @@ void MIMedianBlur::onSubmitClicked()
     qDebug() << "image: rows=" << image.rows;
     qDebug() << "image: cols=" << image.cols;
 
-    //进行方框滤波操作
+    //进行中值滤波MedianBlur
     Mat out;
     medianBlur ( image, out, horizontalSlider->value()*2+1);
 

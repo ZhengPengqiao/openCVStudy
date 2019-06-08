@@ -19,7 +19,12 @@ SOURCES += main.cpp\
     miblur.cpp \
     migaussianblur.cpp \
     mimedianblur.cpp \
-    mibilateralfilter.cpp
+    mibilateralfilter.cpp \
+    midilate.cpp \
+    mierode.cpp \
+    mierodedilate.cpp \
+    miopenclose.cpp \
+    mitopblackhat.cpp
 
 
 
@@ -52,6 +57,11 @@ HEADERS  += mainwindow.h \
     miblur.h \
     migaussianblur.h \
     mimedianblur.h \
-    mibilateralfilter.h
+    mibilateralfilter.h \
+    midilate.h \
+    mierode.h \
+    mierodedilate.h \
+    miopenclose.h \
+    mitopblackhat.h
 
 FORMS    +=

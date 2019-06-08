@@ -1,4 +1,5 @@
-#include "miblur.h"
+#include "midilate.h"
+
 
 #include <QLabel>
 #include <QLineEdit>
@@ -7,9 +8,9 @@
 #include <QApplication>
 #include <QSizePolicy>
 
-#define MINAME "均值滤波Blur"
+#define MINAME "膨胀Dilate"
 
-MIBlur::MIBlur()
+MIDilate::MIDilate()
 {
     this->setModelItemName(MINAME);
 
@@ -26,7 +27,7 @@ MIBlur::MIBlur()
     hBoxLayout->addWidget(imagePath);
     button = new QPushButton(subPage);
     button->setText("...");
-    connect(button, &QPushButton::clicked, this, &MIBlur::selectFile);
+    connect(button, &QPushButton::clicked, this, &MIDilate::selectFile);
     hBoxLayout->addWidget(button);
 
     vBoxLayout->addLayout(hBoxLayout);
@@ -46,7 +47,7 @@ MIBlur::MIBlur()
     horizontalSlider->setSingleStep(1);
     horizontalSlider->setTickPosition(QSlider::TicksAbove);
     horizontalSlider->setValue(6);
-    connect(horizontalSlider, &QSlider::valueChanged, this, &MIBlur::onSubmitClicked);
+    connect(horizontalSlider, &QSlider::valueChanged, this, &MIDilate::onSubmitClicked);
     hBoxLayoutSlider->addWidget(horizontalSlider);
 
     vBoxLayout->addLayout(hBoxLayoutSlider);
@@ -96,7 +97,7 @@ MIBlur::MIBlur()
     onSubmitClicked();
 }
 
-void MIBlur::selectFile()
+void MIDilate::selectFile()
 {
     qDebug() << "selectFile: " << this->modelItemName;
     //定义文件对话框类
@@ -136,7 +137,7 @@ void MIBlur::selectFile()
 }
 
 
-void MIBlur::onSubmitClicked()
+void MIDilate::onSubmitClicked()
 {
     QImage qimage;
     qDebug() << "onSubmitClicked: " << this->modelItemName;
@@ -156,9 +157,13 @@ void MIBlur::onSubmitClicked()
     qDebug() << "image: rows=" << image.rows;
     qDebug() << "image: cols=" << image.cols;
 
-    //进行均值滤波操作
+    //获取自定义核
+    Mat element = getStructuringElement(MORPH_RECT,
+               Size(2*horizontalSlider->value()+1, 2*horizontalSlider->value()+1),
+               Point( horizontalSlider->value(), horizontalSlider->value() ));
+    //膨胀Dilate
     Mat out;
-    blur( image, out, Size(horizontalSlider->value()+1, horizontalSlider->value()+1));
+    dilate(image, out, element);
 
     //创建窗口
     if( imShowChechBox->isChecked() == true )

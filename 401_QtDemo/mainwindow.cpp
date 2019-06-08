@@ -3,6 +3,17 @@
 #include <QDebug>
 #include <QSpacerItem>
 
+#include "miboxfilter.h"
+#include "miblur.h"
+#include "migaussianblur.h"
+#include "mimedianblur.h"
+#include "mibilateralfilter.h"
+#include "midilate.h"
+#include "mierode.h"
+#include "mierodedilate.h"
+#include "miopenclose.h"
+#include "mitopblackhat.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
@@ -13,6 +24,11 @@ MainWindow::MainWindow(QWidget *parent) :
     addModelItem(new MIGaussianBlur());
     addModelItem(new MIMedianBlur());
     addModelItem(new MIBilateralFilter());
+    addModelItem(new MIDilate());
+    addModelItem(new MIErode());
+    addModelItem(new MIErodeDilate());
+    addModelItem(new MIOpenClose());
+    addModelItem(new MITopBlackHat());
 }
 
 

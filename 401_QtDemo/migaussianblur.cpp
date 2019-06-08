@@ -158,7 +158,7 @@ void MIGaussianBlur::onSubmitClicked()
     qDebug() << "image: rows=" << image.rows;
     qDebug() << "image: cols=" << image.cols;
 
-    //进行方框滤波操作
+    //进行高斯滤波GaussianBlur
     Mat out;
     GaussianBlur( image, out, Size( horizontalSlider->value()*2+1, horizontalSlider->value()*2+1 ), 0, 0 );
     //创建窗口
