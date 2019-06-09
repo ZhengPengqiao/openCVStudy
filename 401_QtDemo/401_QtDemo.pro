@@ -30,7 +30,9 @@ SOURCES += main.cpp\
     mipyrresize.cpp \
     miseparatoritem.cpp \
     micanny.cpp \
-    misobel.cpp
+    misobel.cpp \
+    mischarr.cpp \
+    milaplacian.cpp
 
 
 
@@ -74,6 +76,8 @@ HEADERS  += mainwindow.h \
     mipyrresize.h \
     miseparatoritem.h \
     micanny.h \
-    misobel.h
+    misobel.h \
+    mischarr.h \
+    milaplacian.h
 
 FORMS    +=

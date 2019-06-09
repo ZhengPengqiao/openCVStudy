@@ -82,6 +82,13 @@ QImage MIBase::cvMat2QImage(const cv::Mat& mat)
         }
         return image;
     }
+    else if(mat.type() == CV_8UC2)
+    {
+        qDebug() << "CV_8UC2";
+        const uchar *pSrc = (const uchar*)mat.data;
+        QImage image(pSrc, mat.cols, mat.rows, mat.step, QImage::Format_RGB16);
+        return image.rgbSwapped();
+    }
     else if(mat.type() == CV_8UC3)
     {
         qDebug() << "CV_8UC3";
@@ -98,7 +105,8 @@ QImage MIBase::cvMat2QImage(const cv::Mat& mat)
     }
     else
     {
-        qDebug() << "ERROR: Mat could not be converted to QImage.";
+        qDebug() << mat.type() << "ERROR: Mat could not be converted to QImage.";
+        qDebug() << "CV_8UC1:" << CV_8UC1 << "CV_8UC2:" << CV_8UC2 << "CV_8UC3:" << CV_8UC3 << "CV_8UC3:" << CV_8UC4;
         return QImage();
     }
 }

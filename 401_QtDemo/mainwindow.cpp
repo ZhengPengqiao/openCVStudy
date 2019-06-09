@@ -19,6 +19,8 @@
 #include "miseparatoritem.h"
 #include "micanny.h"
 #include "misobel.h"
+#include "mischarr.h"
+#include "milaplacian.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -55,6 +57,8 @@ MainWindow::MainWindow(QWidget *parent) :
     addModelItem(new MISeparatorItem("---->图像变换", str2));
     addModelItem(new MICanny());
     addModelItem(new MISobel());
+    addModelItem(new MIScharr());
+    addModelItem(new MILaplacian());
 }
 
 
