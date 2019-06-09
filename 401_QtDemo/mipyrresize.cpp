@@ -55,9 +55,9 @@ MIPyrResize::MIPyrResize()
     ResizeDown->setObjectName(QStringLiteral("ResizeDown"));
     ctrlHBoxLayout->addWidget(ResizeDown);
 
-    operComboBox = new QComboBox(subPage);
-    operComboBox->setObjectName(QStringLiteral("operComboBox"));
-    ctrlHBoxLayout->addWidget(operComboBox);
+    interComboBox = new QComboBox(subPage);
+    interComboBox->setObjectName(QStringLiteral("interComboBox"));
+    ctrlHBoxLayout->addWidget(interComboBox);
     valComboBox = new QComboBox(subPage);
     valComboBox->setObjectName(QStringLiteral("valComboBox"));
     ctrlHBoxLayout->addWidget(valComboBox);
@@ -80,17 +80,13 @@ MIPyrResize::MIPyrResize()
     label_src->setObjectName(QStringLiteral("label_src"));
     imageLabel_src = new QLabel(scrollAreaWidgetContents);
     imageLabel_src->setObjectName(QStringLiteral("imageLabel_src"));
-    formLayout->setWidget(1, QFormLayout::LabelRole, label_src);
-    formLayout->setWidget(1, QFormLayout::FieldRole, imageLabel_src);
-
+    formLayout->insertRow(1, label_src, imageLabel_src);
 
     label_dst = new QLabel(scrollAreaWidgetContents);
     label_dst->setObjectName(QStringLiteral("label_dst"));
     imageLabel_dst = new QLabel(scrollAreaWidgetContents);
     imageLabel_dst->setObjectName(QStringLiteral("imageLabel_dst"));
-    formLayout->setWidget(2, QFormLayout::LabelRole, label_dst);
-    formLayout->setWidget(2, QFormLayout::FieldRole, imageLabel_dst);
-
+    formLayout->insertRow(2, label_dst, imageLabel_dst);
 
     scrollAreaWidgetContents->resize(formLayout->sizeHint());
 
@@ -103,7 +99,7 @@ MIPyrResize::MIPyrResize()
     connect(PyrDown, &QPushButton::clicked, this, &MIPyrResize::dealPyrDown);
     connect(ResizeUp, &QPushButton::clicked, this, &MIPyrResize::dealResizeUp);
     connect(ResizeDown, &QPushButton::clicked, this, &MIPyrResize::dealResizeDown);
-    connect(operComboBox, &QComboBox::currentTextChanged, this, &MIPyrResize::onComboBoxCurrentTextChanged);
+    connect(interComboBox, &QComboBox::currentTextChanged, this, &MIPyrResize::onComboBoxCurrentTextChanged);
     connect(valComboBox, &QComboBox::currentTextChanged, this, &MIPyrResize::onComboBoxCurrentTextChanged);
     this->addSubPage(subPage);
 
@@ -114,7 +110,7 @@ void MIPyrResize::retranslateUi()
 {
     QImage qimage;
     label->setText("待处理图片:");
-    imagePath->setText("../assert/image23.jpg");
+    imagePath->setText("../assert/image21.jpg");
     button->setText("...");
 
     g_srcImage  = imread(imagePath->text().toStdString());
@@ -129,30 +125,35 @@ void MIPyrResize::retranslateUi()
     qimage = cvMat2QImage(g_srcImage);
     imageLabel_src->setPixmap(QPixmap::fromImage(qimage));
     imageLabel_src->resize(QSize(qimage.width(),qimage.height()));
-    imageLabel_src->setScaledContents(true);
     label_src->setText(MINAME+QString("【原图】\n width:%1 \n height:%2").arg(qimage.width()).arg(qimage.height()));
     imageLabel_dst->setText("imageLabel_dst");
     qimage = cvMat2QImage(g_dstImage);
     imageLabel_dst->setPixmap(QPixmap::fromImage(qimage));
     imageLabel_dst->resize(QSize(qimage.width(),qimage.height()));
-    imageLabel_dst->setScaledContents(true);
     imageLabel_dst->installEventFilter(this);//安装事件过滤器
     label_dst->setText(MINAME+QString("【效果图】\n width:%1 \n height:%2").arg(qimage.width()).arg(qimage.height()));
     scrollAreaWidgetContents->resize(formLayout->sizeHint());
     imShowChechBox->setText("使用OpenCV的imshow");
-    operComboBox->clear();
-    operComboBox->insertItems(0, QStringList()
-     << QApplication::translate("MIPyrResize", "PyrUp", 0)
-     << QApplication::translate("MIPyrResize", "PyrDown", 0)
-     << QApplication::translate("MIPyrResize", "Resize 放大", 0)
-     << QApplication::translate("MIPyrResize", "Resize 缩小", 0)
+    interComboBox->clear();
+    interComboBox->insertItems(0, QStringList()
+     << QApplication::translate("MIPyrResize", "Resize-最近邻插值", 0)
+     << QApplication::translate("MIPyrResize", "Resize-线性插值", 0)
+     << QApplication::translate("MIPyrResize", "Resize-区域插值", 0)
+     << QApplication::translate("MIPyrResize", "Resize-三次样条插值", 0)
+     << QApplication::translate("MIPyrResize", "Resize-Lanczos插值", 0)
     );
-    operType = operComboBox->currentIndex();
+    operInter = interComboBox->currentIndex();
     valComboBox->clear();
     valComboBox->insertItems(0, QStringList()
+     << QApplication::translate("MIPyrResize", "x1", 0)
      << QApplication::translate("MIPyrResize", "x2", 0)
+     << QApplication::translate("MIPyrResize", "x3", 0)
+     << QApplication::translate("MIPyrResize", "x4", 0)
     );
-    operVal = valComboBox->currentIndex();
+
+    operVal = valComboBox->currentIndex()+1;
+
+    qDebug() << "operInter:" << operInter << " operVal:" << operVal;
 
     PyrUp->setText("PyrUp");
     PyrDown->setText("PyrDown");
@@ -199,7 +200,7 @@ void MIPyrResize::selectFile()
         imageLabel_src->setPixmap(QPixmap::fromImage(qimage));
         imageLabel_src->resize(QSize(image.width(),image.height()));
         label_src->setText(MINAME+QString("【原图】\n width:%1 \n height:%2")
-                           .arg(image.width()).arg(image.height()));
+                           .arg(qimage.width()).arg(qimage.height()));
 
 
         qDebug() << "image: path=" << imagePath->text();
@@ -212,7 +213,7 @@ void MIPyrResize::selectFile()
         imageLabel_dst->setPixmap(QPixmap::fromImage(qimage));
         imageLabel_dst->resize(QSize(image.width(),image.height()));
         label_dst->setText(MINAME+QString("【效果图】\n width:%1 \n height:%2")
-                           .arg(image.width()).arg(image.height()));
+                           .arg(qimage.width()).arg(qimage.height()));
 
         scrollAreaWidgetContents->resize(formLayout->sizeHint());
     }
@@ -225,67 +226,15 @@ void MIPyrResize::selectFile()
 
 void MIPyrResize::onSubmitClicked()
 {
-    QImage qimage;
-    //获取自定义核
-    switch( operType )
-    {
-        case 0: //PyrUp
-            pyrUp( g_tmpImage, g_dstImage, Size( g_tmpImage.cols*operVal, g_tmpImage.rows*operVal ) );
-        break;
-        case 1: //PyrDown
-            pyrDown( g_tmpImage, g_dstImage, Size( g_tmpImage.cols/operVal, g_tmpImage.rows/operVal ));
-        break;
-        case 2: //Resize 放大
-            resize(g_tmpImage, g_dstImage,Size( g_tmpImage.cols*operVal, g_tmpImage.rows*operVal ));
-        break;
-        case 3: //Resize 缩小
-            resize(g_tmpImage, g_dstImage,Size( g_tmpImage.cols/operVal, g_tmpImage.rows/operVal ));
-        break;
-    }
-    //创建窗口
-    if( imShowChechBox->isChecked() == true )
-    {
-        namedWindow( (QString(MINAME)+QString("【原图】")).toStdString() );
-        namedWindow( (QString(MINAME)+QString("【效果图】")).toStdString() );
-    }
-
-    //显示原图
-    if( imShowChechBox->isChecked() == true )
-    {
-        imshow( (QString(MINAME)+QString("【原图】")).toStdString(), g_srcImage );
-    }
-    //显示效果图
-    if( imShowChechBox->isChecked() == true )
-    {
-        imshow( (QString(MINAME)+QString("【效果图】")).toStdString() ,g_dstImage );
-    }
-
-
-    qimage = cvMat2QImage(g_srcImage);
-    imageLabel_src->setPixmap(QPixmap::fromImage(qimage));  // 将图片显示到label上
-    label_src->setText(MINAME+QString("【原图】\n width:%1 \n height:%2")
-                       .arg(qimage.width()).arg(qimage.height()));
-    qimage = cvMat2QImage(g_dstImage);
-    imageLabel_dst->setPixmap(QPixmap::fromImage(qimage));  // 将图片显示到label上
-    label_dst->setText(MINAME+QString("【效果图】\n width:%1 \n height:%2")
-                       .arg(qimage.width()).arg(qimage.height()));
-    g_tmpImage = g_dstImage;
-    scrollAreaWidgetContents->resize(formLayout->sizeHint());
+    qDebug() << "onSubmitClicked, 不做处理";
 }
 
 
 void MIPyrResize::onComboBoxCurrentTextChanged(QString text)
 {
-    operType = operComboBox->currentIndex();
-
-    switch( valComboBox->currentIndex() )
-    {
-        case 0:
-            operVal = 2;
-        break;
-    }
-
-    qDebug() << "operType:" << operType << " operVal:" << operVal;
+    operInter = interComboBox->currentIndex();
+    operVal = valComboBox->currentIndex()+1;
+    qDebug() << "operType:" << operInter << " operVal:" << operVal;
 }
 
 
@@ -294,7 +243,9 @@ void MIPyrResize::dealPyrUp()
     QImage qimage;
     //获取自定义核
 
-    pyrUp( g_tmpImage, g_dstImage, Size( g_tmpImage.cols*operVal, g_tmpImage.rows*operVal ) );
+    qDebug() << "dealPyrUp" << "cols:" << g_tmpImage.cols << "rows:" << g_tmpImage.rows << "operVal:" << 2;
+
+    pyrUp( g_tmpImage, g_dstImage, Size( g_tmpImage.cols*2, g_tmpImage.rows*2 ) );
 
     //创建窗口
     if( imShowChechBox->isChecked() == true )
@@ -325,6 +276,8 @@ void MIPyrResize::dealPyrUp()
                        .arg(qimage.width()).arg(qimage.height()));
     g_tmpImage = g_dstImage;
     scrollAreaWidgetContents->resize(formLayout->sizeHint());
+
+    qDebug() << "dealPyrUp" << "OK";
 }
 
 
@@ -334,8 +287,10 @@ void MIPyrResize::dealPyrDown()
     QImage qimage;
     //获取自定义核
 
-    pyrDown( g_tmpImage, g_dstImage, Size( g_tmpImage.cols/operVal, g_tmpImage.rows/operVal ) );
+    qDebug() << "dealPyrDown" << "cols:" << g_tmpImage.cols << "rows:" << g_tmpImage.rows << "operVal:" << 2;
+    pyrDown( g_tmpImage, g_dstImage, Size( g_tmpImage.cols/2, g_tmpImage.rows/2 ) );
 
+    qDebug() << "dealPyrDown" << "111";
     //创建窗口
     if( imShowChechBox->isChecked() == true )
     {
@@ -355,16 +310,25 @@ void MIPyrResize::dealPyrDown()
     }
 
 
+    qDebug() << "dealPyrDown" << "222";
+
     qimage = cvMat2QImage(g_srcImage);
     imageLabel_src->setPixmap(QPixmap::fromImage(qimage));  // 将图片显示到label上
+    imageLabel_src->resize(qimage.size());
     label_src->setText(MINAME+QString("【原图】\n width:%1 \n height:%2")
                        .arg(qimage.width()).arg(qimage.height()));
+
+    qDebug() << "dealPyrDown" << "333";
     qimage = cvMat2QImage(g_dstImage);
     imageLabel_dst->setPixmap(QPixmap::fromImage(qimage));  // 将图片显示到label上
+    imageLabel_dst->resize(qimage.size());
     label_dst->setText(MINAME+QString("【效果图】\n width:%1 \n height:%2")
                        .arg(qimage.width()).arg(qimage.height()));
+
     g_tmpImage = g_dstImage;
     scrollAreaWidgetContents->resize(formLayout->sizeHint());
+
+    qDebug() << "dealResizeDown" << "OK";
 }
 
 
@@ -374,7 +338,25 @@ void MIPyrResize::dealResizeUp()
     QImage qimage;
     //获取自定义核
 
-    resize(g_tmpImage, g_dstImage,Size( g_tmpImage.cols*operVal, g_tmpImage.rows*operVal ));
+    qDebug() << "dealResizeUp" << "cols:" << g_tmpImage.cols << "rows:" << g_tmpImage.rows << "operVal:" << operVal;
+    switch( operInter )
+    {
+        case 0:
+            resize(g_tmpImage, g_dstImage,Size( g_tmpImage.cols*operVal, g_tmpImage.rows*operVal ), (0,0), (0,0), INTER_NEAREST);
+        break;
+        case 1:
+            resize(g_tmpImage, g_dstImage,Size( g_tmpImage.cols*operVal, g_tmpImage.rows*operVal ), (0,0), (0,0), INTER_LINEAR);
+        break;
+        case 2:
+            resize(g_tmpImage, g_dstImage,Size( g_tmpImage.cols*operVal, g_tmpImage.rows*operVal ), (0,0), (0,0), INTER_AREA);
+        break;
+        case 3:
+            resize(g_tmpImage, g_dstImage,Size( g_tmpImage.cols*operVal, g_tmpImage.rows*operVal ), (0,0), (0,0), INTER_CUBIC);
+        break;
+        case 4:
+            resize(g_tmpImage, g_dstImage,Size( g_tmpImage.cols*operVal, g_tmpImage.rows*operVal ), (0,0), (0,0), INTER_LANCZOS4);
+        break;
+    }
     //创建窗口
     if( imShowChechBox->isChecked() == true )
     {
@@ -404,6 +386,8 @@ void MIPyrResize::dealResizeUp()
                        .arg(qimage.width()).arg(qimage.height()));
     g_tmpImage = g_dstImage;
     scrollAreaWidgetContents->resize(formLayout->sizeHint());
+
+    qDebug() << "dealPyrDown" << "OK";
 }
 
 
@@ -413,7 +397,26 @@ void MIPyrResize::dealResizeDown()
     QImage qimage;
     //获取自定义核
 
-    resize(g_tmpImage, g_dstImage,Size( g_tmpImage.cols/operVal, g_tmpImage.rows/operVal ));
+    qDebug() << "dealResizeDown" << "cols:" << g_tmpImage.cols << "rows:" << g_tmpImage.rows << "operVal:" << operVal;
+
+    switch( operInter )
+    {
+        case 0:
+            resize(g_tmpImage, g_dstImage,Size( g_tmpImage.cols/operVal, g_tmpImage.rows/operVal ), (0,0), (0,0), INTER_NEAREST);
+        break;
+        case 1:
+            resize(g_tmpImage, g_dstImage,Size( g_tmpImage.cols/operVal, g_tmpImage.rows/operVal ), (0,0), (0,0), INTER_LINEAR);
+        break;
+        case 2:
+            resize(g_tmpImage, g_dstImage,Size( g_tmpImage.cols/operVal, g_tmpImage.rows/operVal ), (0,0), (0,0), INTER_AREA);
+        break;
+        case 3:
+            resize(g_tmpImage, g_dstImage,Size( g_tmpImage.cols/operVal, g_tmpImage.rows/operVal ), (0,0), (0,0), INTER_CUBIC);
+        break;
+        case 4:
+            resize(g_tmpImage, g_dstImage,Size( g_tmpImage.cols/operVal, g_tmpImage.rows/operVal ), (0,0), (0,0), INTER_LANCZOS4);
+        break;
+    }
 
     //创建窗口
     if( imShowChechBox->isChecked() == true )
@@ -444,4 +447,6 @@ void MIPyrResize::dealResizeDown()
                        .arg(qimage.width()).arg(qimage.height()));
     g_tmpImage = g_dstImage;
     scrollAreaWidgetContents->resize(formLayout->sizeHint());
+
+    qDebug() << "dealResizeDown" << "OK";
 }

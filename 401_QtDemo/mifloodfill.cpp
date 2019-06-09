@@ -188,20 +188,17 @@ void MIFloodFill::retranslateUi()
     qimage = cvMat2QImage(g_srcImage);
     imageLabel_src->setPixmap(QPixmap::fromImage(qimage));
     imageLabel_src->resize(QSize(qimage.width(),qimage.height()));
-    imageLabel_src->setScaledContents(true);
     label_src->setText(MINAME+QString("【原图】\n width:%1 \n height:%2").arg(qimage.width()).arg(qimage.height()));
     imageLabel_dst->setText("imageLabel_dst");
     qimage = cvMat2QImage(g_srcImage);
     imageLabel_dst->setPixmap(QPixmap::fromImage(qimage));
     imageLabel_dst->resize(QSize(qimage.width(),qimage.height()));
-    imageLabel_dst->setScaledContents(true);
     imageLabel_dst->installEventFilter(this);//安装事件过滤器
     label_dst->setText(MINAME+QString("【效果图】\n width:%1 \n height:%2").arg(qimage.width()).arg(qimage.height()));
     imageLabel_mask->setText("imageLabel_mask");
     qimage = cvMat2QImage(g_maskImage);
     imageLabel_mask->setPixmap(QPixmap::fromImage(qimage));
     imageLabel_mask->resize(QSize(qimage.width(),qimage.height()));
-    imageLabel_mask->setScaledContents(true);
     label_mask->setText(MINAME+QString("【Mask】\n width:%1 \n height:%2").arg(qimage.width()).arg(qimage.height()));
     scrollAreaWidgetContents->resize(formLayout->sizeHint());
 
@@ -263,9 +260,9 @@ void MIFloodFill::selectFile()
         g_maskImage = Scalar::all(0);	//将mask所有元素设置为0
         qimage = cvMat2QImage(g_dstImage);
         imageLabel_dst->setPixmap(QPixmap::fromImage(qimage));
-        imageLabel_dst->resize(QSize(image.width(),image.height()));
+        imageLabel_dst->resize(QSize(qimage.width(),qimage.height()));
         label_dst->setText(MINAME+QString("【效果图】\n width:%1 \n height:%2")
-                           .arg(image.width()).arg(image.height()));
+                           .arg(qimage.width()).arg(qimage.height()));
 
         qimage = cvMat2QImage(g_maskImage);
         imageLabel_mask->setPixmap(QPixmap::fromImage(qimage));

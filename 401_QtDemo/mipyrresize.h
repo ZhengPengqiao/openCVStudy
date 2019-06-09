@@ -41,7 +41,7 @@ public:
     QLabel *imageLabel_dst;
     QImage image;
 
-    QComboBox *operComboBox;
+    QComboBox *interComboBox;
     QComboBox *valComboBox;
     QCheckBox *imShowChechBox;
 
@@ -52,7 +52,7 @@ public:
     QPushButton *ResizeDown;
 
 
-    int operType;
+    int operInter;
     int operVal;
 
     Mat g_srcImage, g_dstImage, g_tmpImage;
