@@ -18,6 +18,7 @@
 #include "mipyrresize.h"
 #include "miseparatoritem.h"
 #include "micanny.h"
+#include "misobel.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -53,6 +54,7 @@ MainWindow::MainWindow(QWidget *parent) :
                    "直方图均衡化";
     addModelItem(new MISeparatorItem("---->图像变换", str2));
     addModelItem(new MICanny());
+    addModelItem(new MISobel());
 }
 
 

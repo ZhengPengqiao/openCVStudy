@@ -1,4 +1,5 @@
-#include "micanny.h"
+#include "misobel.h"
+
 
 #include <QLabel>
 #include <QLineEdit>
@@ -9,9 +10,9 @@
 #include <QMouseEvent>
 #include <QComboBox>
 
-#define MINAME "边沿检测Canny"
+#define MINAME "边沿检测Sobel"
 
-MICanny::MICanny()
+MISobel::MISobel()
 {
     this->setModelItemName(MINAME);
 
@@ -41,20 +42,13 @@ MICanny::MICanny()
     ctrlHBoxLayout->addWidget(imShowChechBox);
     vBoxLayout->addLayout(ctrlHBoxLayout);
 
-    threshold1Layout = new QHBoxLayout();
-    threshold1Label = new QLabel(subPage);
-    threshold1Layout->addWidget(threshold1Label);
-    threshold1Slider = new QSlider(subPage);
-    threshold1Slider->setOrientation(Qt::Horizontal);
-    threshold1Layout->addWidget(threshold1Slider);
-    vBoxLayout->addLayout(threshold1Layout);
-    threshold2Layout = new QHBoxLayout();
-    threshold2Label = new QLabel(subPage);
-    threshold2Layout->addWidget(threshold2Label);
-    threshold2Slider = new QSlider(subPage);
-    threshold2Slider->setOrientation(Qt::Horizontal);
-    threshold2Layout->addWidget(threshold2Slider);
-    vBoxLayout->addLayout(threshold2Layout);
+    sobelKernelLayout = new QHBoxLayout();
+    sobelKernelLabel = new QLabel(subPage);
+    sobelKernelLayout->addWidget(sobelKernelLabel);
+    sobelKernelSlider = new QSlider(subPage);
+    sobelKernelSlider->setOrientation(Qt::Horizontal);
+    sobelKernelLayout->addWidget(sobelKernelSlider);
+    vBoxLayout->addLayout(sobelKernelLayout);
 
 
     // 当前模块的Area区域
@@ -79,18 +73,18 @@ MICanny::MICanny()
     imageLabel_src = new QLabel(scrollAreaWidgetContents);
     imageLabel_src->setObjectName(QStringLiteral("imageLabel_src"));
     formLayout->insertRow(1, label_src, imageLabel_src);
-    // 当前模块的Area区域, 显示灰度图
-    label_gray = new QLabel(scrollAreaWidgetContents);
-    label_gray->setObjectName(QStringLiteral("label_gray"));
-    imageLabel_gray = new QLabel(scrollAreaWidgetContents);
-    imageLabel_gray->setObjectName(QStringLiteral("imageLabel_gray"));
-    formLayout->insertRow(2, label_gray, imageLabel_gray);
-    // 当前模块的Area区域, 显示灰度图的边沿检测
-    label_grayEdges = new QLabel(scrollAreaWidgetContents);
-    label_grayEdges->setObjectName(QStringLiteral("label_grayEdges"));
-    imageLabel_grayEdges = new QLabel(scrollAreaWidgetContents);
-    imageLabel_grayEdges->setObjectName(QStringLiteral("imageLabel_grayEdges"));
-    formLayout->insertRow(3, label_grayEdges, imageLabel_grayEdges);
+    // 当前模块的Area区域, 显示sobelAbsX
+    label_sobelAbsX = new QLabel(scrollAreaWidgetContents);
+    label_sobelAbsX->setObjectName(QStringLiteral("label_sobelAbsX"));
+    imageLabel_sobelAbsX = new QLabel(scrollAreaWidgetContents);
+    imageLabel_sobelAbsX->setObjectName(QStringLiteral("imageLabel_sobelAbsX"));
+    formLayout->insertRow(2, label_sobelAbsX, imageLabel_sobelAbsX);
+    // 当前模块的Area区域, 显示sobelAbsY
+    label_sobelAbsY = new QLabel(scrollAreaWidgetContents);
+    label_sobelAbsY->setObjectName(QStringLiteral("label_sobelAbsY"));
+    imageLabel_sobelAbsY = new QLabel(scrollAreaWidgetContents);
+    imageLabel_sobelAbsY->setObjectName(QStringLiteral("imageLabel_sobelAbsY"));
+    formLayout->insertRow(3, label_sobelAbsY, imageLabel_sobelAbsY);
     // 当前模块的Area区域, 显示效果图
     label_dst = new QLabel(scrollAreaWidgetContents);
     label_dst->setObjectName(QStringLiteral("label_dst"));
@@ -103,16 +97,15 @@ MICanny::MICanny()
     retranslateUi();
 
     // 初始化当前模块的signal,slot
-    connect(fileSelectButton, &QPushButton::clicked, this, &MICanny::selectFile);
-    connect(imShowChechBox, &QCheckBox::clicked, this, &MICanny::onImShowChechBoxClicked);
-    connect(threshold1Slider, &QSlider::valueChanged, this, &MICanny::onSliderValueChange);
-    connect(threshold2Slider, &QSlider::valueChanged, this, &MICanny::onSliderValueChange);
+    connect(fileSelectButton, &QPushButton::clicked, this, &MISobel::selectFile);
+    connect(imShowChechBox, &QCheckBox::clicked, this, &MISobel::onImShowChechBoxClicked);
+    connect(sobelKernelSlider, &QSlider::valueChanged, this, &MISobel::onSliderValueChange);
 
     this->addSubPage(subPage);
 }
 
 
-void MICanny::retranslateUi()
+void MISobel::retranslateUi()
 {
     QImage qimage;
     fileSelectLabel->setText("待处理图片:");
@@ -121,22 +114,13 @@ void MICanny::retranslateUi()
 
     imShowChechBox->setText("使用OpenCV的imshow");
 
-    threshold1Slider->setMinimum(0);
-    threshold1Slider->setMaximum(255);
-    threshold1Slider->setSingleStep(1);
-    threshold1Slider->setValue(20);
-    threshold1Slider->setTickPosition(QSlider::TicksAbove);
-    threshold1Label->setText("threshold1:" + QString("%1").arg(threshold1Slider->value()));
-    threshold1Val = threshold1Slider->value();
-
-    threshold2Label->setText("threshold2:6");
-    threshold2Slider->setMinimum(0);
-    threshold2Slider->setMaximum(255);
-    threshold2Slider->setSingleStep(1);
-    threshold2Slider->setValue(20);
-    threshold2Slider->setTickPosition(QSlider::TicksAbove);
-    threshold2Label->setText("threshold1:" + QString("%1").arg(threshold2Slider->value()));
-    threshold2Val = threshold2Slider->value();
+    sobelKernelSlider->setMinimum(0);
+    sobelKernelSlider->setMaximum(3);
+    sobelKernelSlider->setSingleStep(1);
+    sobelKernelSlider->setValue(1);
+    sobelKernelSlider->setTickPosition(QSlider::TicksAbove);
+    sobelKernelLabel->setText("sobelKernel:" + QString("%1").arg(sobelKernelSlider->value()));
+    g_sobelKernelSize = sobelKernelSlider->value();
 
     g_srcImage  = imread(fileSelectPath->text().toStdString());
     if( !g_srcImage.data )
@@ -152,10 +136,6 @@ void MICanny::retranslateUi()
     scrollAreaWidgetContents->resize(formLayout->sizeHint());
 
 
-    // 将原图像转换为灰度图像
-    cvtColor( g_srcImage, g_srcGrayImage, COLOR_BGR2GRAY );
-
-
     imShow = imShowChechBox->isChecked();
     if( this->imShow )
     {
@@ -169,7 +149,7 @@ void MICanny::retranslateUi()
 }
 
 
-void MICanny::selectFile()
+void MISobel::selectFile()
 {
     QImage qimage;
     qDebug() << "selectFile: " << this->modelItemName;
@@ -209,9 +189,6 @@ void MICanny::selectFile()
         label_src->setText(MINAME+QString("【原图】\n width:%1 \n height:%2").arg(qimage.width()).arg(qimage.height()));
         scrollAreaWidgetContents->resize(formLayout->sizeHint());
 
-        // 将原图像转换为灰度图像
-        cvtColor( g_srcImage, g_srcGrayImage, COLOR_BGR2GRAY );
-
         onSubmitClicked();
     }
     else
@@ -221,32 +198,30 @@ void MICanny::selectFile()
 }
 
 
-void MICanny::onSubmitClicked()
+void MISobel::onSubmitClicked()
 {
     QImage qimage;
 
     qDebug() << "onSubmitClicked:" << this->modelItemName;
+    // 求 X方向梯度
+    Sobel( g_srcImage, g_sobelGradient_X, CV_16S, 1, 0, (2*g_sobelKernelSize+1), 1, 1, BORDER_DEFAULT );
+    convertScaleAbs( g_sobelGradient_X, g_sobelAbsGradient_X );//计算绝对值，并将结果转换成8位
 
-    // 先使用 3x3内核来降噪
-    blur( g_srcGrayImage, g_GrayDetectedEdges, Size(3,3) );
+    // 求Y方向梯度
+    Sobel( g_srcImage, g_sobelGradient_Y, CV_16S, 0, 1, (2*g_sobelKernelSize+1), 1, 1, BORDER_DEFAULT );
+    convertScaleAbs( g_sobelGradient_Y, g_sobelAbsGradient_Y );//计算绝对值，并将结果转换成8位
 
-    // 运行我们的Canny算子
-    Canny( g_GrayDetectedEdges, g_cannyDetectedEdges, threshold1Val, threshold2Val*3, 3 );
+    // 合并梯度
+    addWeighted( g_sobelAbsGradient_X, 0.5, g_sobelAbsGradient_Y, 0.5, 0, g_dstImage );
 
-    //先将g_dstImage内的所有元素设置为0
-    g_dstImage = Scalar::all(0);
-
-    //使用Canny算子输出的边缘图g_cannyDetectedEdges作为掩码，来将原图g_srcImage拷到目标图g_dstImage中
-    g_srcImage.copyTo( g_dstImage, g_cannyDetectedEdges);
-
-    qimage = cvMat2QImage(g_GrayDetectedEdges);
-    imageLabel_gray->setPixmap(QPixmap::fromImage(qimage));
-    imageLabel_gray->resize(QSize(qimage.width(),qimage.height()));
-    label_gray->setText(MINAME+QString("【灰度图】\n width:%1 \n height:%2").arg(qimage.width()).arg(qimage.height()));
-    qimage = cvMat2QImage(g_cannyDetectedEdges);
-    imageLabel_grayEdges->setPixmap(QPixmap::fromImage(qimage));
-    imageLabel_grayEdges->resize(QSize(qimage.width(),qimage.height()));
-    label_grayEdges->setText(MINAME+QString("【灰度边沿】\n width:%1 \n height:%2").arg(qimage.width()).arg(qimage.height()));
+    qimage = cvMat2QImage(g_sobelAbsGradient_X);
+    imageLabel_sobelAbsX->setPixmap(QPixmap::fromImage(qimage));
+    imageLabel_sobelAbsX->resize(QSize(qimage.width(),qimage.height()));
+    label_sobelAbsX->setText(MINAME+QString("【sobelAbsX】\n width:%1 \n height:%2").arg(qimage.width()).arg(qimage.height()));
+    qimage = cvMat2QImage(g_sobelAbsGradient_Y);
+    imageLabel_sobelAbsY->setPixmap(QPixmap::fromImage(qimage));
+    imageLabel_sobelAbsY->resize(QSize(qimage.width(),qimage.height()));
+    label_sobelAbsY->setText(MINAME+QString("【sobelAbsY】\n width:%1 \n height:%2").arg(qimage.width()).arg(qimage.height()));
     qimage = cvMat2QImage(g_dstImage);
     imageLabel_dst->setPixmap(QPixmap::fromImage(qimage));
     imageLabel_dst->resize(QSize(qimage.width(),qimage.height()));
@@ -257,34 +232,32 @@ void MICanny::onSubmitClicked()
     if( this->imShow )
     {
         imshow( (QString(MINAME)+QString("【原图】")).toStdString(), g_srcImage );
-        imshow( (QString(MINAME)+QString("【灰度图】")).toStdString(), g_GrayDetectedEdges );
-        imshow( (QString(MINAME)+QString("【灰度边沿】")).toStdString(), g_cannyDetectedEdges );
+        imshow( (QString(MINAME)+QString("【sobelAbsX】")).toStdString(), g_sobelAbsGradient_X );
+        imshow( (QString(MINAME)+QString("【sobelAbsY】")).toStdString(), g_sobelAbsGradient_Y );
         imshow( (QString(MINAME)+QString("【效果图】")).toStdString(), g_dstImage );
     }
 }
 
 
 
-void MICanny::onImShowChechBoxClicked(bool status)
+void MISobel::onImShowChechBoxClicked(bool status)
 {
     imShow = status;
     if( this->imShow )
     {
         imshow( (QString(MINAME)+QString("【原图】")).toStdString(), g_srcImage );
-        imshow( (QString(MINAME)+QString("【灰度图】")).toStdString(), g_GrayDetectedEdges );
-        imshow( (QString(MINAME)+QString("【灰度边沿】")).toStdString(), g_cannyDetectedEdges );
+        imshow( (QString(MINAME)+QString("【sobelAbsX】")).toStdString(), g_sobelAbsGradient_X );
+        imshow( (QString(MINAME)+QString("【sobelAbsY】")).toStdString(), g_sobelAbsGradient_Y );
         imshow( (QString(MINAME)+QString("【效果图】")).toStdString(), g_dstImage );
     }
 }
 
 
-void MICanny::onSliderValueChange(int val)
+void MISobel::onSliderValueChange(int val)
 {
-    threshold1Val = threshold1Slider->value();
-    threshold2Val = threshold2Slider->value();
+    g_sobelKernelSize = sobelKernelSlider->value();
 
-    threshold1Label->setText("threshold1:" + QString("%1").arg(threshold1Slider->value()));
-    threshold2Label->setText("threshold1:" + QString("%1").arg(threshold2Slider->value()));
+    sobelKernelLabel->setText("sobelKernel:" + QString("%1").arg(sobelKernelSlider->value()));
 
     onSubmitClicked();
 }

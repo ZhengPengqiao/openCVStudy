@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     mifloodfill.cpp \
     mipyrresize.cpp \
     miseparatoritem.cpp \
-    micanny.cpp
+    micanny.cpp \
+    misobel.cpp
 
 
 
@@ -72,6 +73,7 @@ HEADERS  += mainwindow.h \
     mifloodfill.h \
     mipyrresize.h \
     miseparatoritem.h \
-    micanny.h
+    micanny.h \
+    misobel.h
 
 FORMS    +=
