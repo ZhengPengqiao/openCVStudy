@@ -15,13 +15,23 @@
 #include "mitopblackhat.h"
 #include "mithreshold.h"
 #include "mifloodfill.h"
-#include  "mipyrresize.h"
+#include "mipyrresize.h"
+#include "miseparatoritem.h"
+#include "micanny.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
     initBaseUI();
+    QString str1 = "三种线性滤波:方框滤波,均值滤波,高斯滤波\n"
+                  "两种非线性滤波: 中值滤波,双边滤波\n"
+                  "七种图像处理形态学:腐蚀,膨胀,开运算,闭运算,形态学梯度,顶帽,黑帽\n"
+                  "漫水填充\n"
+                  "图像缩放\n"
+                  "图像金字塔\n"
+                  "阈值化";
 
+    addModelItem(new MISeparatorItem("---->滤波,缩放,阈值化", str1));
     addModelItem(new MIBoxFilter());
     addModelItem(new MIBlur());
     addModelItem(new MIGaussianBlur());
@@ -35,6 +45,14 @@ MainWindow::MainWindow(QWidget *parent) :
     addModelItem(new MIThreshold());
     addModelItem(new MIFloodFill());
     addModelItem(new MIPyrResize());
+
+    QString str2 = "基于OpenCV的边沿检测\n"
+                   "霍夫变换\n"
+                   "重映射\n"
+                   "仿射变换\n"
+                   "直方图均衡化";
+    addModelItem(new MISeparatorItem("---->图像变换", str2));
+    addModelItem(new MICanny());
 }
 
 

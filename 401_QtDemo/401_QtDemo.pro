@@ -27,7 +27,9 @@ SOURCES += main.cpp\
     mitopblackhat.cpp \
     mithreshold.cpp \
     mifloodfill.cpp \
-    mipyrresize.cpp
+    mipyrresize.cpp \
+    miseparatoritem.cpp \
+    micanny.cpp
 
 
 
@@ -68,6 +70,8 @@ HEADERS  += mainwindow.h \
     mitopblackhat.h \
     mithreshold.h \
     mifloodfill.h \
-    mipyrresize.h
+    mipyrresize.h \
+    miseparatoritem.h \
+    micanny.h
 
 FORMS    +=
