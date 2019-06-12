@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="acceptDrops">
+   <bool>true</bool>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="acceptDrops">
+    <bool>true</bool>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="3" column="0">
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="acceptDrops">
+       <bool>true</bool>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>1004</width>
+         <height>647</height>
+        </rect>
+       </property>
+       <widget class="QLabel" name="label">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>59</width>
+          <height>14</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="b_open">
+        <property name="text">
+         <string>Open</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="b_Exit">
+        <property name="text">
+         <string>Exit</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Foramt:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="combo_fm">
+        <item>
+         <property name="text">
+          <string>FM_YUV</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_NV12</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_NV21</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_YUV420sp</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_YV12</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_IYUV</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_I420</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_YUV420p</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_UYVY</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_Y422</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_UYNV</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_YVYU</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_YUYV</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_YUNV</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_BGRA</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_RGBA</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_GRAY</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_BGR565</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_BGR555</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_XYZ</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_YCrCb</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_BayerBG</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_BayerGB</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_BayerGR</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_HSV</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_Lab</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_Luv</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>FM_ForFileFormat</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Size:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="combo_size">
+        <item>
+         <property name="text">
+          <string>320x240</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>640x480</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>720x480</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>720x576</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>800x480</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>800x576</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>800x720</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>1024x600</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>1280x720</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>1440x960</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>2560x1440</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Size:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spin_width">
+        <property name="maximum">
+         <number>10000</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>x</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spin_height">
+        <property name="maximum">
+         <number>10000</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>b_open</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>open_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>49</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>511</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_Exit</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>exit_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>135</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>511</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>combo_size</sender>
+   <signal>currentIndexChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>size_IndexChanged(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>509</x>
+     <y>30</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>511</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>combo_fm</sender>
+   <signal>currentIndexChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>format_IndexChanged(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>274</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>511</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spin_width</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>spin_width_valChange(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>574</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>511</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spin_height</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>spin_height_valChange(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>641</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>511</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>open_clicked()</slot>
+  <slot>exit_clicked()</slot>
+  <slot>format_IndexChanged(QString)</slot>
+  <slot>size_IndexChanged(QString)</slot>
+  <slot>spin_width_valChange(int)</slot>
+  <slot>spin_height_valChange(int)</slot>
+ </slots>
+</ui>
