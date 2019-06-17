@@ -20,6 +20,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(timer,SIGNAL(timeout()),this,SLOT(ReadFrame()));
 
     getVideoMode(ui->combo_Video->currentText());
+
+    on_button_OpenVideo_clicked();
+    on_button_StartVideo_clicked();
 }
 
 MainWindow::~MainWindow()
@@ -29,16 +32,46 @@ MainWindow::~MainWindow()
 
 void MainWindow::ReadFrame()
 {
+    Mat g_GaryFrame;
+    Mat g_GrayDetectedEdges;
+    Mat g_cannyDetectedEdges;
+    vector<Vec2f> lines;
+
     if(capture.isOpened())
     {
         capture >> frame;
         if(!frame.empty())
         {
-            cvtColor(frame, result_frame, CV_BGR2RGB);     //  OpenCV中Mat读入的图像是BGR格式，要转换为RGB格式
-            cv::resize(result_frame, result_frame, Size(640, 480));
+            cvtColor(frame, dst_frame, CV_BGR2RGB);     //  OpenCV中Mat读入的图像是BGR格式，要转换为RGB格式
+
+            cvtColor(frame, g_GaryFrame, CV_BGR2GRAY);     //  OpenCV中Mat读入的图像是BGR格式，要转换为RGB格式
+
+            // 先使用 3x3内核来降噪
+            blur( g_GaryFrame, g_GrayDetectedEdges, Size(3,3) );
+
+            // 运行我们的Canny算子
+            Canny( g_GrayDetectedEdges, g_cannyDetectedEdges, 50, 150, 3 );
+
+            HoughLines(g_cannyDetectedEdges, lines, 1, CV_PI/180, 100, 0, 0);
+
+            for( size_t i = 0; i < lines.size(); i++ )
+            {
+                float rho = lines[i][0], theta = lines[i][1];
+                Point pt1, pt2;
+                double a = cos(theta), b = sin(theta);
+                double x0 = a*rho, y0 = b*rho;
+                pt1.x = cvRound(x0 + 1000*(-b));
+                pt1.y = cvRound(y0 + 1000*(a));
+                pt2.x = cvRound(x0 - 1000*(-b));
+                pt2.y = cvRound(y0 - 1000*(a));
+                //此句代码的OpenCV2版为:
+                //line( dstImage, pt1, pt2, Scalar(55,100,195), 1, CV_AA);
+                //此句代码的OpenCV3版为:
+                line( dst_frame, pt1, pt2, Scalar(55,100,195), 1, LINE_AA);
+            }
 
             // 将抓取到的帧，转换为QImage格式。QImage::Format_RGB888不同的摄像头用不同的格式。
-            QImage image((const uchar*)result_frame.data, result_frame.cols, result_frame.rows, QImage::Format_RGB888);
+            QImage image((const uchar*)dst_frame.data, dst_frame.cols, dst_frame.rows, QImage::Format_RGB888);
             ui->label->setPixmap(QPixmap::fromImage(image));    //  将图片显示到label上
             ui->label->resize( ui->label->pixmap()->size());    //  将label控件resize到fame的尺寸
             ui->label->setGeometry(0,0,ui->label->sizeHint().width(),ui->label->sizeHint().height());

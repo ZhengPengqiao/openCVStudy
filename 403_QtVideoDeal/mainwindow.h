@@ -37,7 +37,7 @@ private:
     QTimer *timer;
     VideoCapture capture;
     Mat frame;
-    Mat result_frame;
+    Mat dst_frame;
     QString file_name;
     int video_mode;
     int video_number;
