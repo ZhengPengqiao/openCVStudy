@@ -1,0 +1,15 @@
+QTabWidget::pane /* The tab widget frame */
+{
+    top:40px;
+    border-image: url(:/assert/buttonback.png);
+}
+
+/* QTabWidget::tab */
+/* 如果使用CustomTabStyle进行格式控制,这里就不能配置相关格式 */
+/* 不然代码中的格式不会起作用 */
+
+/*整个最上面的tab栏*/
+QTabWidget::tab-bar {
+    alignment: left;
+}
+

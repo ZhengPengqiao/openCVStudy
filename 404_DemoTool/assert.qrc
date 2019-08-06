@@ -1,0 +1,42 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assert/buttonback.png</file>
+        <file>assert/buttonback_active.png</file>
+        <file>assert/windows_back.jpg</file>
+        <file>QSS/qt.qss</file>
+        <file>assert/shader.frag</file>
+        <file>assert/shader.vert</file>
+        <file>assert/buttonback_hover.png</file>
+        <file>assert/ICON/001.png</file>
+        <file>assert/ICON/002.png</file>
+        <file>assert/ICON/003.png</file>
+        <file>assert/ICON/004.png</file>
+        <file>assert/ICON/005.png</file>
+        <file>assert/ICON/006.png</file>
+        <file>assert/ICON/007.png</file>
+        <file>assert/ICON/008.png</file>
+        <file>assert/ICON/009.png</file>
+        <file>assert/ICON/010.png</file>
+        <file>assert/ICON/011.png</file>
+        <file>assert/ICON/012.png</file>
+        <file>assert/ICON/013.png</file>
+        <file>assert/ICON/014.png</file>
+        <file>assert/ICON/015.png</file>
+        <file>assert/ICON/016.png</file>
+        <file>assert/ICON/017.png</file>
+        <file>assert/ICON/018.png</file>
+        <file>assert/ICON/019.png</file>
+        <file>assert/ICON/020.png</file>
+        <file>assert/ICON/021.png</file>
+        <file>assert/ICON/022.png</file>
+        <file>assert/ICON/023.png</file>
+        <file>assert/ICON/024.png</file>
+        <file>assert/ICON/025.png</file>
+        <file>assert/ICON/026.png</file>
+        <file>assert/ICON/027.png</file>
+        <file>assert/ICON/028.png</file>
+        <file>assert/ICON/076.png</file>
+        <file>assert/ICON/101.png</file>
+        <file>assert/ICON/102.png</file>
+    </qresource>
+</RCC>
