@@ -55,10 +55,17 @@ public:
     explicit NumberCheckFrom(QWidget *parent = 0);
     ~NumberCheckFrom();
     int getPiexSum(Mat &image);
+    QString template_image;
+    QString recongition_image;
+    cv::Mat QImage2cvMat(QImage image);
+    QImage cvMat2QImage(const cv::Mat& mat);
+    void clearLayout(QLayout *layout);
 
 public slots:
-    void on_pusfbutton_check_click();
-    void on_pusfbutton_templete_click();
+    void pushButton_recognition_onclick();
+    void pushButton_create_complate_onclick();
+    void pushButton_select_template_onclick();
+    void pushButton_select_recognition_onclick();
 
 private:
     Ui::NumberCheckFrom *ui;
