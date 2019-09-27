@@ -42,3 +42,7 @@ target_wrapper.*
 # QtCtreator CMake
 CMakeLists.txt.user*
 .vscode
+
+
+Doc/opencv-3.4.0_install
+Doc/opencv-3.4.1_install_win_mingw32
