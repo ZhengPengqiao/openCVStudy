@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QImage>
 #include <QByteArray>
+#include <QTimer>
+
 
 #include "opencv2/core/core.hpp"
 #include "opencv2/highgui/highgui.hpp"
@@ -40,6 +42,9 @@ public:
     Mat QImage2cvMat(QImage image);
     void showImage();
     float getFormatPixelSize(QString fm_mode);
+    char *p_data;
+    int frame_num;
+    QTimer *timer;
 
 public slots:
     void open_clicked();
@@ -48,6 +53,9 @@ public slots:
     void size_IndexChanged(QString str);
     void spin_width_valChange(int val);
     void spin_height_valChange(int val);
+    void spin_frame_num_valChange(int val);
+    void pushButton_stream_ctrl_onclick(bool);
+    void showYuvStream();
 
 protected:
     //拖动进入事件

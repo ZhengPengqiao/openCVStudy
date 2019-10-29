@@ -35,7 +35,7 @@
          <x>0</x>
          <y>0</y>
          <width>1004</width>
-         <height>647</height>
+         <height>644</height>
         </rect>
        </property>
        <widget class="QLabel" name="label">
@@ -316,6 +316,40 @@
        </widget>
       </item>
       <item>
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>frame_num:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinBox_frame_num"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Fps:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinBox_fps">
+        <property name="value">
+         <number>25</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_stream_ctrl">
+        <property name="text">
+         <string>播放(点击开始)</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -432,6 +466,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>spinBox_frame_num</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>spin_frame_num_valChange(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>822</x>
+     <y>18</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>919</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_stream_ctrl</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>pushButton_stream_ctrl_onclick(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>969</x>
+     <y>27</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1022</x>
+     <y>57</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>open_clicked()</slot>
@@ -440,5 +506,7 @@
   <slot>size_IndexChanged(QString)</slot>
   <slot>spin_width_valChange(int)</slot>
   <slot>spin_height_valChange(int)</slot>
+  <slot>spin_frame_num_valChange(int)</slot>
+  <slot>pushButton_stream_ctrl_onclick(bool)</slot>
  </slots>
 </ui>

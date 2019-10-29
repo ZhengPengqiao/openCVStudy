@@ -21,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->scrollArea->setWidgetResizable(false);
     ui->scrollArea->setBackgroundRole(QPalette::Dark);
     ui->scrollArea->setAlignment(Qt::AlignCenter);
+    p_data = 0;
+    frame_num = 0;
 
     fm_mode = "FM_UYVY";
     pixel_size = 2;
@@ -40,12 +42,23 @@ MainWindow::MainWindow(QWidget *parent) :
                                .arg(s_width*s_height*pixel_size));
     ui->spin_width->setValue(s_width);
     ui->spin_height->setValue(s_height);
+
+    timer = new QTimer(this);
+    connect(timer,SIGNAL(timeout()),this,SLOT(showYuvStream()));
 }
 
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+
+void MainWindow::showYuvStream()
+{
+    frame_num++;
+    ui->spinBox_frame_num->setValue(frame_num);
+    showImage();
 }
 
 
@@ -89,8 +102,20 @@ void MainWindow::showImage()
 
     src_image = Scalar(0, 0, 0);
 
-    memcpy(src_image.data, m_data.data(),
-           (m_data.size()<(s_height*s_width*pixel_size)?m_data.size():(s_height*s_width*pixel_size)));
+    p_data = m_data.data();
+    int offset = (frame_num*s_height*s_width*pixel_size);
+
+    if( offset >= m_data.size() )
+    {
+        offset = 0;
+        frame_num = 0;
+        ui->spinBox_frame_num->setValue(frame_num);
+    }
+
+    qDebug() << "offset" << offset << frame_num << s_height << s_width << pixel_size;
+
+    memcpy(src_image.data, p_data+offset,
+           ((m_data.size()-offset)<(s_height*s_width*pixel_size)?m_data.size():(s_height*s_width*pixel_size)));
 
     qDebug() << "showImage" << "src w:" << src_image.cols << "h:" << src_image.rows << "type :" << src_image.type() << "pixel_size:" << pixel_size;
 
@@ -464,6 +489,16 @@ void MainWindow::spin_width_valChange(int val)
 }
 
 
+void MainWindow::spin_frame_num_valChange(int val)
+{
+    frame_num = val;
+
+    qDebug() << "frame_num:" << frame_num;
+
+    showImage();
+}
+
+
 void MainWindow::spin_height_valChange(int val)
 {
     s_height = val;
@@ -471,4 +506,20 @@ void MainWindow::spin_height_valChange(int val)
     qDebug() << "s_width:" << s_width << "s_height:" << s_height;
 
     showImage();
+}
+
+
+
+void MainWindow::pushButton_stream_ctrl_onclick(bool val)
+{
+    if( val )
+    {
+        ui->pushButton_stream_ctrl->setText("播放(点击关闭)");
+        timer->start(1000/ui->spinBox_fps->value());      //  停止读取数据。
+    }
+    else
+    {
+        ui->pushButton_stream_ctrl->setText("播放(点击开始)");
+        timer->stop();      //  停止读取数据。
+    }
 }
